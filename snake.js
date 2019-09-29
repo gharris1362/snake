@@ -36,7 +36,10 @@ function start() {
 
 // Score
 function drawScore() {
-    document.getElementById('score').innerHTML = 'SCORE: ' + score
+    document.getElementById('score').innerHTML = 'P1 SCORE: ' + score
+}
+function drawScore2() {
+    document.getElementById('score2').innerHTML = 'P2 SCORE: ' + score2
 }
 
 function draw() {
@@ -91,14 +94,15 @@ function draw() {
         console.log(x)
     }
 
-    if (snakeX2 == appleX && snakeY2 == appleY) {
+    else if (snakeX2 == appleX && snakeY2 == appleY) {
         tailSize2++; score2++;
         x = x + 0.5;
         appleX = Math.floor(Math.random() * gridSize);
         appleY = Math.floor(Math.random() * gridSize);
-        drawScore()
-        if (tailSize2++) {
-            console.log(score2)
+        drawScore2()
+        console.log(score2)
+        if (score2++) {
+            tailSize2++
         }
         clearInterval(drawInterval)
         drawInterval = setInterval(draw, 1000 / x)
@@ -128,6 +132,24 @@ function draw() {
             running = false
             gameOver()
         }
+        if (score2 > 0 && snake2Trail[i].x == snakeX2 && snake2Trail[i].y == snakeY2) {
+            tailSize2 = defaultTailSize;
+            document.getElementById('score').innerHTML = 'SCORE 0'
+            running = false;
+            gameOver2()
+        }
+        // if (snakeTrail[i].x == snakeX2 && snakeTrail[i].y == snakeY2) {
+        //     tailSize = defaultTailSize;
+        //     document.getElementById('score').innerHTML = 'SCORE: 0'
+        //     running = false
+        //     gameOver()
+        // }
+        // if (snake2Trail[i].x == snakeX && snake2Trail.y == snakeY0) {
+        //     tailSize2 = defaultTailSize;
+        //     document.getElementById('score').innerHTML = 'SCORE 0'
+        //     running = false;
+        //     gameOver2()
+       // }
     }
 
     // Paint Snake 2
@@ -140,12 +162,12 @@ function draw() {
             tileSize
         );
 
-        if (score2 > 0 && snake2Trail[i].x == snakeX2 && snake2Trail[i].y == snakeY2) {
-            tailSize2 = defaultTailSize;
-            document.getElementById('score').innerHTML = 'SCORE: 0'
-            running = false
-            gameOver()
-        }
+        // if (score2 > 0 && snake2Trail[i].x == snakeX2 && snake2Trail[i].y == snakeY2) {
+        //     tailSize2 = defaultTailSize;
+        //     document.getElementById('score').innerHTML = 'SCORE: 0'
+        //     running = false
+        //     gameOver()
+        // }
     }
 
 
@@ -161,23 +183,28 @@ function draw() {
     }
 
     snake2Trail.push({ x: snakeX2, y: snakeY2 });
-    while (snake2Trail.length > tailSize) {
+    while (snake2Trail.length > tailSize2) {
         snake2Trail.shift();
     }
-    
 
-     
+
 
 }
 
 // Game Over
 function gameOver() {
-    alert('Game Over, Your Score Was: ' + score)
+    alert('Game Over Player 1, Your Score Was: ' + score)
     window.location.reload()
     score = 0
     score2 = 0
 }
 
+function gameOver2() {
+    alert('Game Over Player 2, Your Score was ' + score2)
+    window.location.reload()
+    score = 0;
+    score2 = 0;
+}
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Input 
