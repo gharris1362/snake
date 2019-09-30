@@ -10,7 +10,7 @@ let gridSize = (tileSize = 20); // 20 * 20 = 400
 let nextX = (nextY = 0);
 let nextX2 = (nextY2 = 0);
 // Snake 1
-let defaultTailSize = 1;
+let defaultTailSize = 3;
 let tailSize = defaultTailSize;
 let tailSize2 = defaultTailSize;
 
@@ -22,8 +22,9 @@ let snakeX2 = (snakeY2 = 15);
 // Apple
 let appleX = Math.floor(Math.random() * gridSize);
 let appleY = Math.floor(Math.random() * gridSize);
-
-window.addEventListener('keydown', function(e) {
+let lastKey;
+let lastKey2;
+window.addEventListener('keydown', function (e) {
     if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
         e.preventDefault();
     }
@@ -106,13 +107,11 @@ function draw() {
         appleX = Math.floor(Math.random() * gridSize);
         appleY = Math.floor(Math.random() * gridSize);
         drawScore2()
-        console.log(score2)
         // if (score2++) {
         //     tailSize2++
         // }
         clearInterval(drawInterval)
         drawInterval = setInterval(draw, 1000 / x)
-        console.log(x)
     }
     //paint background
     ctx.fillStyle = "#71b280";
@@ -122,7 +121,7 @@ function draw() {
     // Paint Snake
     ctx.fillStyle = "green";
     for (i = 0; i < snakeTrail.length; i++) {
-       
+
         ctx.fillRect(
             snakeTrail[i].x * tileSize,
             snakeTrail[i].y * tileSize,
@@ -131,7 +130,7 @@ function draw() {
         );
 
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-           
+
         // Snake bites its tail?
         if (score > 0 && snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
             tailSize = defaultTailSize;
@@ -139,25 +138,28 @@ function draw() {
             running = false
             gameOver()
         }
-        if (snakeTrail[0].x == snakeX2 && snakeTrail[0].y == snakeY2) {
-            tailSize = defaultTailSize;
-            document.getElementById('score').innerHTML = 'SCORE: 0'
-            running = false
-            gameOver()}
+        if (snake2Trail[i] !== undefined) {
+            if (snakeX == snake2Trail[i].x && snakeY == snake2Trail[i].y) {
+                tailSize = defaultTailSize;
+                document.getElementById('score').innerHTML = 'SCORE: 0'
+                running = false
+                gameOver()
+            }
+        }
         // if (score2 > 0 && snake2Trail[i].x == snakeX2 && snake2Trail[i].y == snakeY2) {
         //     tailSize2 = defaultTailSize;
         //     document.getElementById('score').innerHTML = 'SCORE 0'
         //     running = false;
         //     gameOver2()
         //}
-    
+
         // }
         // if (snake2Trail[i].x == snakeX && snake2Trail.y == snakeY0) {
         //     tailSize2 = defaultTailSize;
         //     document.getElementById('score').innerHTML = 'SCORE 0'
         //     running = false;
         //     gameOver2()
-       // }
+        // }
     }
     // Paint Snake 2
     ctx.fillStyle = "purple";
@@ -175,11 +177,15 @@ function draw() {
             running = false
             gameOver2()
         }
-        else if (snake2Trail[0].x == snakeX && snake2Trail[0].y == snakeY) {
-            tailSize2 = defaultTailSize;
-            document.getElementById('score').innerHTML = '0'
-            running = false
-            gameOver2()}
+        if (snakeTrail[i] !== undefined) {
+            if (snakeX2 == snakeTrail[i].x && snakeY2 == snakeTrail[i].y) {
+                tailSize2 = defaultTailSize;
+                document.getElementById('score').innerHTML = '0'
+                running = false
+                gameOver2()
+            }
+        }
+
     }
 
 
@@ -207,16 +213,24 @@ function draw() {
 function gameOver() {
     alert('Game Over Player 1, Your Score Was: ' + score);
     alert('Player 2 Wins! Player 2 Score was ' + score2);
-    window.location.reload()
+    snakeTrail = [];
+    snake2Trail = [];
+    snakeX = (snakeY = 5);
+    snakeX2 = (snakeY2 = 15);
     console.log('Game Over')
     score = 0
     score2 = 0
+    window.location.reload();
 }
 
 function gameOver2() {
     alert('Game Over Player 2, Your Score was ' + score2);
     alert('Player 1 Wins! Player 1 score was ' + score);
-
+    snakeTrail = [];
+    snake2Trail = [];
+    snakeX = (snakeY = 5);
+    snakeX2 = (snakeY2 = 15);
+    console.log('Game Over');
     window.location.reload()
     score = 0;
     score2 = 0;
@@ -225,46 +239,112 @@ function gameOver2() {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Input 
 function keyDownEvent(e) {
-    switch (e.keyCode) {
-        case 37:
-            nextX = -1;
-            nextY = 0;
-            break;
-        case 38:
-            nextX = 0;
-            nextY = -1;
-            break;
-        case 39:
-            nextX = 1;
-            nextY = 0;
-            break;
-        case 40:
-            nextX = 0;
-            nextY = 1;
-            break;
-        //--------Snake 2 Input----------//
-        case 87:
-            nextX2 = 0;
-            nextY2 = -1;
-            console.log(`${snakeX2}, ${snakeY2}`);
-            !83;
-            break;
-        case 65:
-            nextX2 = -1;
-            nextY2 = 0;
-            console.log(`${snakeX2}, ${snakeY2}`)
-            break;
-        case 83:
-            nextX2 = 0;
-            nextY2 = 1;
+    console.log(e.keyCode);
+    if (e.keyCode != lastKey) {
+        switch (e.keyCode) {
+            case 37:
+                if (lastKey != 39) {
+                    nextX = -1;
+                    nextY = 0;
+                    lastKey = e.keyCode;
+                    break;
+                }
+                else {
+                    return
+                }
+            case 38: {
+                if (lastKey != 40) {
+                    console.log(e.keyCode);
+                    nextX = 0;
+                    nextY = -1;
+                    lastKey = e.keyCode;
+                    break;
+                } else {
+                    return
+                }
+            }
 
-            console.log(`${snakeX2}, ${snakeY2}`)
-            break;
-        case 68:
-            nextX2 = 1;
-            nextY2 = 0;
-            console.log(`${snakeX2}, ${snakeY2}`)
-            break;
+            case 39:
+                if (lastKey != 37) {
+                    nextX = 1;
+                    nextY = 0;
+                    lastKey = e.keyCode;
+                    break;
+                }
+                else {
+                    return
+                }
+
+            case 40: {
+                if (lastKey != 38) {
+                    nextX = 0;
+                    nextY = 1;
+                    lastKey = e.keyCode;
+                    break;
+                }
+            }
+        }
+
+        //-----------Snake 2 ------------------
+        if (e.keyCode != lastKey2) {
+            switch (e.keyCode) {
+                case 87:
+                    if (lastKey2 != 83) {
+                        nextX2 = 0;
+                        nextY2 = -1;
+                        lastKey2 = e.keyCode;
+                        break;
+                    }
+                    else {
+                        return
+                    }
+                case 65:
+                    if (lastKey2 != 68) {
+                        nextX2 = -1;
+                        nextY2 = 0;
+                        lastKey2 = e.keyCode;
+                        break;
+                    }
+                    else { return }
+
+                case 83:
+                    if (lastKey2 != 87) {
+                        nextX2 = 0;
+                        nextY2 = 1;
+                        lastKey2 = e.keyCode;
+                        break;
+                    }
+                    else { return }
+                case 68: if (lastKey2 != 65) {
+                    nextX2 = 1;
+                    nextY2 = 0;
+                    lastKey2 = e.keyCode;
+                    break;
+                }
+                else { return }
+
+            }
+        }
+    }
+    if (lastKey == undefined) {
+        if (e.keyCode == 37 ||
+            e.keyCode == 38 ||
+            e.keyCode == 39 ||
+            e.keyCode || 40) {
+            lastKey = e.keyCode;
+            return;
+        }
+        if (lastKey2 == undefined){
+            if(e.keyCode == 87 ||
+                e.keyCode == 65 ||
+                e.keyCode == 83 ||
+                e.keyCode == 68){
+                lastKey2 = e.keyCode;
+                return;
+            }
+
+
+        }
 
     }
 }
