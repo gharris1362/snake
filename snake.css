@@ -1,7 +1,7 @@
 html {
     background-image: linear-gradient(#134e5e, #71b280);
     font-family: 'Mansalva', cursive;
-    height: 100%;
+    /* height: auto; */
 }
 h1 {
     display: flex;

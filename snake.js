@@ -1,4 +1,4 @@
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!+
+
 let score = 0;
 let score2 = 0;
 let running = false;
@@ -14,7 +14,7 @@ let defaultTailSize = 3;
 let tailSize = defaultTailSize;
 let tailSize2 = defaultTailSize;
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 let snakeTrail = [];
 let snake2Trail = [];
 let snakeX = (snakeY = 5);
@@ -30,7 +30,6 @@ window.addEventListener('keydown', function (e) {
     }
 }, false)
 
-
 function start() {
     if (running == false) {
         running = true;
@@ -40,7 +39,6 @@ function start() {
         drawInterval = setInterval(draw, 1000 / x)
     }
 };
-
 // Score
 function drawScore() {
     document.getElementById('score').innerHTML = score
@@ -48,16 +46,12 @@ function drawScore() {
 function drawScore2() {
     document.getElementById('score2').innerHTML = score2
 }
-
 function draw() {
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!+
     // Move snake in next pos
     snakeX += nextX;
     snakeY += nextY;
     snakeX2 += nextX2;
     snakeY2 += nextY2;
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // Snake over game world
     if (snakeX < 0) {
         snakeX = gridSize - 1;
@@ -85,7 +79,6 @@ function draw() {
         snakeY2 = 0
     }
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // Snake bite apple? 
     if (snakeX == appleX && snakeY == appleY) {
         tailSize + 1; score++;
@@ -107,9 +100,6 @@ function draw() {
         appleX = Math.floor(Math.random() * gridSize);
         appleY = Math.floor(Math.random() * gridSize);
         drawScore2()
-        // if (score2++) {
-        //     tailSize2++
-        // }
         clearInterval(drawInterval)
         drawInterval = setInterval(draw, 1000 / x)
     }
@@ -117,7 +107,6 @@ function draw() {
     ctx.fillStyle = "#71b280";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // Paint Snake
     ctx.fillStyle = "green";
     for (i = 0; i < snakeTrail.length; i++) {
@@ -128,9 +117,6 @@ function draw() {
             tileSize,
             tileSize
         );
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         // Snake bites its tail?
         if (score > 0 && snakeTrail[i].x == snakeX && snakeTrail[i].y == snakeY) {
             tailSize = defaultTailSize;
@@ -146,20 +132,6 @@ function draw() {
                 gameOver()
             }
         }
-        // if (score2 > 0 && snake2Trail[i].x == snakeX2 && snake2Trail[i].y == snakeY2) {
-        //     tailSize2 = defaultTailSize;
-        //     document.getElementById('score').innerHTML = 'SCORE 0'
-        //     running = false;
-        //     gameOver2()
-        //}
-
-        // }
-        // if (snake2Trail[i].x == snakeX && snake2Trail.y == snakeY0) {
-        //     tailSize2 = defaultTailSize;
-        //     document.getElementById('score').innerHTML = 'SCORE 0'
-        //     running = false;
-        //     gameOver2()
-        // }
     }
     // Paint Snake 2
     ctx.fillStyle = "purple";
@@ -193,7 +165,6 @@ function draw() {
     ctx.fillStyle = "red";
     ctx.fillRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // Set snake trail
     snakeTrail.push({ x: snakeX, y: snakeY });
     while (snakeTrail.length > tailSize) {
@@ -236,7 +207,6 @@ function gameOver2() {
     score2 = 0;
 }
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Input 
 function keyDownEvent(e) {
     console.log(e.keyCode);
@@ -284,8 +254,7 @@ function keyDownEvent(e) {
                 }
             }
         }
-
-        //-----------Snake 2 ------------------
+        //-----------Snake 2 ------------------//
         if (e.keyCode != lastKey2) {
             switch (e.keyCode) {
                 case 87:
@@ -293,6 +262,7 @@ function keyDownEvent(e) {
                         nextX2 = 0;
                         nextY2 = -1;
                         lastKey2 = e.keyCode;
+                        console.log(lastKey2)
                         break;
                     }
                     else {
@@ -322,7 +292,6 @@ function keyDownEvent(e) {
                     break;
                 }
                 else { return }
-
             }
         }
     }
@@ -330,21 +299,18 @@ function keyDownEvent(e) {
         if (e.keyCode == 37 ||
             e.keyCode == 38 ||
             e.keyCode == 39 ||
-            e.keyCode || 40) {
+            e.keyCode == 40) {
             lastKey = e.keyCode;
             return;
         }
-        if (lastKey2 == undefined){
-            if(e.keyCode == 87 ||
-                e.keyCode == 65 ||
-                e.keyCode == 83 ||
-                e.keyCode == 68){
-                lastKey2 = e.keyCode;
-                return;
-            }
-
-
+    }
+    if (lastKey2 == undefined) {
+        if (e.keyCode == 87 ||
+            e.keyCode == 65 ||
+            e.keyCode == 83 ||
+            e.keyCode == 68) {
+            lastKey2 = e.keyCode;
+            return;
         }
-
     }
 }
